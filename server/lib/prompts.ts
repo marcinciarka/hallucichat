@@ -4,6 +4,10 @@ const GLOBAL_END_INSTRUCTION = `I will respond to your requests in the format:
 - "TRANSFORM NICKNAME: {nickname}" - for nickname transformations
 - "TRANSFORM MESSAGE: {message}" - for message transformations
 
+IMPORTANT LENGTH LIMITS:
+- Nicknames: Maximum 30 characters (including emojis and special characters)
+- Messages: Maximum 500 characters (including emojis and special characters)
+
 Respond with only the transformed text, nothing else.`
 
 export const PROMPT_TEMPLATES = {
@@ -20,20 +24,22 @@ Style definition:
 - Keep original language; never translate.
 
 Rules:
-1. Transform usernames into chaotic, exaggerated, funky variants: elongated, mixed case, emojis, random gibberish insertions.
+1. Transform usernames into chaotic, exaggerated, funky variants: elongated, mixed case, emojis, random gibberish insertions. MUST stay under 30 characters total.
 2. Transform messages with extreme randomness:
    - Shuffle words sometimes.
    - Insert random letters or nonsense syllables between words (e.g., "heee-yaaa-ooo", "skrrrt-blip").
    - Stretch some letters ridiculously long and leave others short.
    - Random emojis between words or inside words.
    - Vary interjections, tildes, exclamations, ellipses, question marks.
+   - MUST stay under 500 characters total.
 3. Keep the original meaning vaguely recognizable, but the style should dominate – it should look like a hallucinated, silly, glitchy remix.
 4. Output only the transformed text, no explanations.
+5. CRITICAL: Always respect the character limits - 30 for nicknames, 500 for messages.
 
 Examples:
 
 Input username: "Kasia"
-Output username: "Kaaazz👅iiiAAaa~!! Blip💫✨skrrrt?!"
+Output username: "Kaaazz👅iiiAAaa~!! 💫✨"
 
 Input message (Polish): "Idę spać, dobranoc"
 Output message: "Iiiidęee spaaaać 😴💫 doooobbbraaaaanoOoOooccc 👅✨🔥 mmmwah~ blip-skrrt!!!"
@@ -55,17 +61,19 @@ Style definition:
 
 Rules:
 1. Always keep the input language (Polish stays Polish, English stays English, etc.).
-2. Transform usernames to sound dignified, grandiose, or whimsically formal (e.g., "Kasia" → "Pani Kasia z Krainy Lśniących Gwiazd").
+2. Transform usernames to sound dignified, grandiose, or whimsically formal (e.g., "Kasia" → "Pani Kasia z Krainy Lśniących Gwiazd"). MUST stay under 30 characters total.
 3. Transform messages into elaborate, pompous Victorian-style language:
    - Replace common words with formal or archaic equivalents.
    - Add polite or dramatic flourishes, ornate phrasing, theatrical interjections.
    - Maintain clarity: the recipient should understand the original meaning.
+   - MUST stay under 500 characters total.
 4. Output only the transformed text, no explanations.
+5. CRITICAL: Always respect the character limits - 30 for nicknames, 500 for messages.
 
 Examples:
 
 Input username: "Kasia"
-Output username: "Pani Kasia z Krainy Lśniących Gwiazd"
+Output username: "Pani Kasia ze Dworu 🎩"
 
 Input message (Polish): "Idę spać, dobranoc"
 Output message: "Pragnę teraz udać się do mojego pokoju, aby oddać się nocnemu odpoczynkowi; życzę Państwu spokojnej i pełnej wdzięku nocy."
@@ -85,12 +93,14 @@ Style definition:
 
 Rules:
 1. Always preserve the original language.
-2. Transform usernames into simple, primal variants: short, distorted, minimal extra characters or emojis.
+2. Transform usernames into simple, primal variants: short, distorted, minimal extra characters or emojis. MUST stay under 30 characters total.
 3. Transform messages into short, direct phrases:
    - Use very few words.
    - Avoid complex grammar.
    - Keep message as basic as possible.
+   - MUST stay under 500 characters total.
 4. Output only the transformed text, no explanations.
+5. CRITICAL: Always respect the character limits - 30 for nicknames, 500 for messages.
 
 Examples:
 

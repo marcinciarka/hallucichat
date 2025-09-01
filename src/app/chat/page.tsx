@@ -4,10 +4,13 @@ import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { io, Socket } from "socket.io-client";
 
+type PromptStyle = "freaky" | "victorian" | "caveman";
+
 interface User {
   id: string;
   nickname: string;
   originalNickname: string;
+  style: PromptStyle;
 }
 
 interface Message {
@@ -42,6 +45,8 @@ export default function Chat() {
 
   useEffect(() => {
     const nickname = localStorage.getItem("hallucitalk-nickname");
+    const style =
+      (localStorage.getItem("hallucitalk-style") as PromptStyle) || "freaky";
 
     if (!nickname) {
       router.push("/");
@@ -63,7 +68,7 @@ export default function Chat() {
     newSocket.on("connect", () => {
       console.log("Connected to server");
       setIsConnecting(false);
-      newSocket.emit("join", nickname);
+      newSocket.emit("join", { nickname, style });
     });
 
     newSocket.on("user-joined", (user: User) => {
@@ -131,6 +136,7 @@ export default function Chat() {
 
   const leaveChat = () => {
     localStorage.removeItem("hallucitalk-nickname");
+    localStorage.removeItem("hallucitalk-style");
     router.push("/");
   };
 
@@ -171,16 +177,25 @@ export default function Chat() {
           <div>
             <h1 className="text-2xl font-bold text-white">HalluciTalk</h1>
             {currentUser && (
-              <p className="text-white/80 text-sm">
-                Welcome,{" "}
-                <span className="font-medium">{currentUser.nickname}</span>
-                {currentUser.nickname !== currentUser.originalNickname && (
-                  <span className="text-white/60">
-                    {" "}
-                    (originally {currentUser.originalNickname})
-                  </span>
-                )}
-              </p>
+              <div className="text-white/80 text-sm">
+                <p>
+                  Welcome,{" "}
+                  <span className="font-medium">{currentUser.nickname}</span>
+                  {currentUser.nickname !== currentUser.originalNickname && (
+                    <span className="text-white/60">
+                      {" "}
+                      (originally {currentUser.originalNickname})
+                    </span>
+                  )}
+                </p>
+                <p className="text-white/60 text-xs mt-1">
+                  Style:{" "}
+                  <span className="capitalize font-medium">
+                    {currentUser.style}
+                  </span>{" "}
+                  ✨
+                </p>
+              </div>
             )}
           </div>
           <div className="flex items-center space-x-4">
@@ -210,12 +225,19 @@ export default function Chat() {
                 }`}
                 title={
                   user.nickname !== user.originalNickname
-                    ? `Original: ${user.originalNickname}`
-                    : undefined
+                    ? `Original: ${user.originalNickname} | Style: ${user.style}`
+                    : `Style: ${user.style}`
                 }
               >
-                <div className="flex items-center space-between">
-                  <div className="text-white font-medium">{user.nickname}</div>
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <div className="text-white font-medium">
+                      {user.nickname}
+                    </div>
+                    <div className="text-white/60 text-xs capitalize">
+                      {user.style} style
+                    </div>
+                  </div>
                   {user.nickname !== user.originalNickname && (
                     <span
                       className="text-xs opacity-50 ml-1"
@@ -233,6 +255,10 @@ export default function Chat() {
                       Original nickname:
                     </div>
                     <div>{user.originalNickname}</div>
+                    <div className="font-medium text-xs text-gray-300 mb-1 mt-2">
+                      Transformation style:
+                    </div>
+                    <div className="capitalize">{user.style}</div>
                     {/* Arrow */}
                     <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
                   </div>

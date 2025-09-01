@@ -15,20 +15,20 @@ function getPromptStyle(): PromptStyle {
   return style && PROMPT_TEMPLATES[style] ? style : 'freaky';
 }
 
-function getSystemPrompt(): string {
-  const style = getPromptStyle();
-  return PROMPT_TEMPLATES[style].systemPrompt;
+function getSystemPrompt(style?: PromptStyle): string {
+  const promptStyle = style || getPromptStyle();
+  return PROMPT_TEMPLATES[promptStyle];
 }
 
-// Global chat session
-let chatSession: ChatSession | null = null;
+// Global chat sessions per style
+const chatSessions: Map<PromptStyle, ChatSession> = new Map();
 
-async function getChatSession(): Promise<ChatSession> {
-  if (!chatSession) {
+async function getChatSession(style: PromptStyle): Promise<ChatSession> {
+  if (!chatSessions.has(style)) {
     const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-    const systemPrompt = getSystemPrompt();
+    const systemPrompt = getSystemPrompt(style);
 
-    chatSession = model.startChat({
+    const session = model.startChat({
       history: [
         {
           role: "user",
@@ -36,15 +36,16 @@ async function getChatSession(): Promise<ChatSession> {
         },
         {
           role: "model",
-          parts: [{ text: "I understand! I'm ready to transform usernames and messages into the freeky 👅 style. Send me your transformation requests!" }]
+          parts: [{ text: `I understand! I'm ready to transform usernames and messages into the ${style} style. Send me your transformation requests!` }]
         }
       ]
     });
+    chatSessions.set(style, session);
   }
-  return chatSession;
+  return chatSessions.get(style)!;
 }
 
-export async function transformNickname(originalNickname: string): Promise<string> {
+export async function transformNickname(originalNickname: string, style: PromptStyle = 'freaky'): Promise<string> {
   // If no API key is provided, return original nickname
   if (!process.env.GEMINI_API_KEY) {
     console.warn('GEMINI_API_KEY not set, returning original nickname');
@@ -52,15 +53,17 @@ export async function transformNickname(originalNickname: string): Promise<strin
   }
 
   try {
-    const chat = await getChatSession();
+    const chat = await getChatSession(style);
     const result = await chat.sendMessage(`TRANSFORM NICKNAME: ${originalNickname}`);
     const transformedNickname = result.response.text().trim();
+    console.log('transformNickname', originalNickname, style, transformedNickname);
+
 
     // Remove quotes if present (sometimes AI adds them)
     const cleanedNickname = transformedNickname.replace(/^["']|["']$/g, '');
 
     // Ensure the transformed nickname is not empty and reasonable length
-    if (cleanedNickname && cleanedNickname.length <= 20) {
+    if (cleanedNickname && cleanedNickname.length <= 30) {
       return cleanedNickname;
     }
 
@@ -71,7 +74,7 @@ export async function transformNickname(originalNickname: string): Promise<strin
   }
 }
 
-export async function transformMessage(originalMessage: string): Promise<string> {
+export async function transformMessage(originalMessage: string, style: PromptStyle = 'freaky'): Promise<string> {
   // If no API key is provided, return original message
   if (!process.env.GEMINI_API_KEY) {
     console.warn('GEMINI_API_KEY not set, returning original message');
@@ -79,9 +82,10 @@ export async function transformMessage(originalMessage: string): Promise<string>
   }
 
   try {
-    const chat = await getChatSession();
+    const chat = await getChatSession(style);
     const result = await chat.sendMessage(`TRANSFORM MESSAGE: ${originalMessage}`);
     const transformedMessage = result.response.text().trim();
+    console.log('transformMessage', originalMessage, style, transformedMessage);
 
     // Remove quotes if present (sometimes AI adds them)
     const cleanedMessage = transformedMessage.replace(/^["']|["']$/g, '');

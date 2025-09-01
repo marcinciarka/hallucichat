@@ -1,6 +1,7 @@
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import { transformMessage, transformNickname } from './lib/gemini';
+import { PromptStyle } from './lib/prompts';
 import dotenv from 'dotenv';
 
 // Load environment variables from .env.local
@@ -13,6 +14,7 @@ interface User {
   id: string;
   nickname: string;
   originalNickname: string;
+  style: PromptStyle;
 }
 
 interface Message {
@@ -40,15 +42,18 @@ io.on('connection', (socket) => {
   console.log('User connected:', socket.id);
 
   // Handle user joining with nickname
-  socket.on('join', async (originalNickname: string) => {
+  socket.on('join', async (data: { nickname: string; style: PromptStyle }) => {
     try {
-      // Transform nickname using Gemini
-      const transformedNickname = await transformNickname(originalNickname);
+      const { nickname: originalNickname, style } = data;
+
+      // Transform nickname using Gemini with the selected style
+      const transformedNickname = await transformNickname(originalNickname, style);
 
       const user: User = {
         id: socket.id,
         nickname: transformedNickname,
-        originalNickname
+        originalNickname,
+        style
       };
 
       users.set(socket.id, user);
@@ -78,8 +83,8 @@ io.on('connection', (socket) => {
     }
 
     try {
-      // Transform message using Gemini
-      const transformedContent = await transformMessage(originalContent);
+      // Transform message using Gemini with the user's style
+      const transformedContent = await transformMessage(originalContent, user.style);
 
       const message: Message = {
         id: `${Date.now()}-${socket.id}`,
