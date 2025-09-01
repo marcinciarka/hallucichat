@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: hallucichat
+    runtime: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm run start:prod
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: GEMINI_API_KEY
+        sync: false # This will be set manually in Render dashboard
+    autoDeploy: true
+    region: oregon
+    disk:
+      name: hallucichat-disk
+      mountPath: /app
+      sizeGB: 1

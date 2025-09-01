@@ -3,12 +3,17 @@ import { Server } from 'socket.io';
 import { transformMessage, transformNickname } from './lib/gemini';
 import { PromptStyle } from './lib/prompts';
 import dotenv from 'dotenv';
+import next from 'next';
 
-// Load environment variables from .env.local
-dotenv.config({ path: '.env.local' });
+// Load environment variables from .env.local in dev, .env in production
+dotenv.config({ path: process.env.NODE_ENV === 'production' ? '.env' : '.env.local' });
 
 const dev = process.env.NODE_ENV !== 'production';
-const SOCKET_PORT = dev ? 3001 : (process.env.PORT || 3000);
+const SOCKET_PORT = process.env.PORT || (dev ? 3001 : 3000);
+
+// Initialize Next.js
+const nextApp = next({ dev });
+const handle = nextApp.getRequestHandler();
 
 interface User {
   id: string;
@@ -25,12 +30,21 @@ interface Message {
   timestamp: Date;
 }
 
-// Create standalone Socket.IO server
-const server = createServer();
+// Create server that handles both Next.js and Socket.IO
+const server = createServer(async (req, res) => {
+  if (!dev) {
+    // In production, handle Next.js requests
+    await handle(req, res);
+  } else {
+    // In development, just return 404 for this server
+    res.statusCode = 404;
+    res.end('Not found');
+  }
+});
 
 const io = new Server(server, {
   cors: {
-    origin: dev ? "http://localhost:3000" : false,
+    origin: dev ? "http://localhost:3000" : true,
     methods: ["GET", "POST"]
   }
 });
@@ -123,6 +137,20 @@ io.on('connection', (socket) => {
   });
 });
 
-server.listen(SOCKET_PORT, () => {
-  console.log(`> Socket.IO server ready on http://localhost:${SOCKET_PORT}`);
+// Start the server
+async function startServer() {
+  if (!dev) {
+    // Prepare Next.js in production
+    await nextApp.prepare();
+  }
+
+  server.listen(SOCKET_PORT, () => {
+    console.log(`> Server ready on port ${SOCKET_PORT}`);
+    console.log(`> Environment: ${dev ? 'development' : 'production'}`);
+  });
+}
+
+startServer().catch((err) => {
+  console.error('Error starting server:', err);
+  process.exit(1);
 });
