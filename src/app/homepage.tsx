@@ -13,7 +13,7 @@ export default function Home() {
     if (nickname.trim()) {
       setIsLoading(true);
       // Store nickname in localStorage and navigate to chat
-      localStorage.setItem("hallucitalk-nickname", nickname.trim());
+      localStorage.setItem("HalluciChat-nickname", nickname.trim());
       router.push("/chat");
     }
   };
@@ -23,7 +23,7 @@ export default function Home() {
       <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 w-full max-w-md shadow-2xl border border-white/20">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-white mb-4 tracking-tight">
-            HalluciTalk
+            HalluciChat
           </h1>
           <p className="text-white/80 text-lg">
             Enter the AI-powered chat realm where your words transform into

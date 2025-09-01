@@ -1,5 +1,5 @@
 {
-  "name": "HalluciTalk",
+  "name": "HalluciChat",
   "description": "An AI-powered real-time chat application where your messages and nicknames are magically transformed by Google's Gemini AI in your chosen style.",
   "repository": "https://github.com/marcinciarka/hallucichat",
   "logo": "https://img.icons8.com/fluency/96/chat.png",
@@ -37,6 +37,6 @@
   },
   "addons": [],
   "scripts": {
-    "postdeploy": "echo 'HalluciTalk deployed successfully! Visit your app to start chatting with AI-powered transformations.'"
+    "postdeploy": "echo 'HalluciChat deployed successfully! Visit your app to start chatting with AI-powered transformations.'"
   }
 }

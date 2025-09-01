@@ -1,4 +1,4 @@
-# HalluciTalk Deployment Quick Guide
+# HalluciChat Deployment Quick Guide
 
 [![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://www.heroku.com/deploy?template=https://github.com/marcinciarka/hallucichat)
 
@@ -53,7 +53,7 @@ heroku config:set NODE_ENV=production
 
 # 3. Deploy
 git add .
-git commit -m "Deploy HalluciTalk"
+git commit -m "Deploy HalluciChat"
 git push heroku main
 
 # 4. Open your app

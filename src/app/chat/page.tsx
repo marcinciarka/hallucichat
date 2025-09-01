@@ -44,9 +44,9 @@ export default function Chat() {
   }, [messages]);
 
   useEffect(() => {
-    const nickname = localStorage.getItem("hallucitalk-nickname");
+    const nickname = localStorage.getItem("HalluciChat-nickname");
     const style =
-      (localStorage.getItem("hallucitalk-style") as PromptStyle) || "freaky";
+      (localStorage.getItem("HalluciChat-style") as PromptStyle) || "freaky";
 
     if (!nickname) {
       router.push("/");
@@ -135,8 +135,8 @@ export default function Chat() {
   };
 
   const leaveChat = () => {
-    localStorage.removeItem("hallucitalk-nickname");
-    localStorage.removeItem("hallucitalk-style");
+    localStorage.removeItem("HalluciChat-nickname");
+    localStorage.removeItem("HalluciChat-style");
     router.push("/");
   };
 
@@ -175,7 +175,7 @@ export default function Chat() {
       <div className="bg-white/10 backdrop-blur-lg border-b border-white/20 p-4">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-white">HalluciTalk</h1>
+            <h1 className="text-2xl font-bold text-white">HalluciChat</h1>
             {currentUser && (
               <div className="text-white/80 text-sm">
                 <p>

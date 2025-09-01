@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "HalluciTalk - AI-Powered Chat",
+  title: "HalluciChat - AI-Powered Chat",
   description: "Real-time chat with AI-transformed messages and nicknames",
 };
 

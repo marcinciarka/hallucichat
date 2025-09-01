@@ -1,4 +1,4 @@
-# 🌟 HalluciTalk
+# 🌟 HalluciChat
 
 **An AI-powered real-time chat application where your messages and nicknames are magically transformed by Google's Gemini AI in your chosen style before being shared with others.**
 

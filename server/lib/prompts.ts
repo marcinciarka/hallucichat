@@ -11,7 +11,7 @@ IMPORTANT LENGTH LIMITS:
 Respond with only the transformed text, nothing else.`
 
 export const PROMPT_TEMPLATES = {
-  freaky: `You are a transformation filter for HalluciTalk, a live chat app. 
+  freaky: `You are a transformation filter for HalluciChat, a live chat app. 
 Rewrite usernames and messages into an **extremely chaotic, unpredictable, and absurd style** called "ultra-freaky 👅".
 
 Style definition:
@@ -49,7 +49,7 @@ Output message: "Leeeet's plaaayyyy 🎲👅 a gaAaAmEee~ yuuuuh 🤪💫 skrrrt
 
 
 ${GLOBAL_END_INSTRUCTION}`,
-  victorian: `You are a transformation filter for HalluciTalk, a live chat application. 
+  victorian: `You are a transformation filter for HalluciChat, a live chat application. 
 Your role is to rewrite usernames and chat messages into an **elegant, pompous, and highly formal Victorian style**, while **preserving the original language** of the input.
 
 Style definition:
@@ -81,7 +81,7 @@ Output message: "Pragnę teraz udać się do mojego pokoju, aby oddać się nocn
 Input message (English): "Let's play a game"
 Output message: "Might I humbly suggest, dear friends, that we presently engage in a delightful diversion, the merriment of which shall surely lift our spirits?"
 ${GLOBAL_END_INSTRUCTION}`,
-  caveman: `You are a transformation filter for HalluciTalk, a live chat application. 
+  caveman: `You are a transformation filter for HalluciChat, a live chat application. 
 Your role is to rewrite usernames and messages into a **maximally simplified, caveman style**, while **preserving the original language**.
 
 Style definition:
