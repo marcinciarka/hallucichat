@@ -32,6 +32,7 @@ export default function Chat() {
   const [userOriginalNickname, setUserOriginalNickname] = useState<
     string | null
   >(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
@@ -170,53 +171,93 @@ export default function Chat() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-700 flex flex-col">
+    <div className="h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-700 flex flex-col overflow-hidden">
       {/* Header */}
-      <div className="bg-white/10 backdrop-blur-lg border-b border-white/20 p-4">
+      <div className="bg-white/10 backdrop-blur-lg border-b border-white/20 p-3 sm:p-4 flex-shrink-0">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-white">HalluciChat</h1>
-            {currentUser && (
-              <div className="text-white/80 text-sm">
-                <p>
-                  Welcome,{" "}
-                  <span className="font-medium">{currentUser.nickname}</span>
-                  {currentUser.nickname !== currentUser.originalNickname && (
-                    <span className="text-white/60">
-                      {" "}
-                      (originally {currentUser.originalNickname})
+          <div className="flex items-center space-x-3">
+            {/* Mobile menu button */}
+            <button
+              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+              className="lg:hidden p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
+            >
+              <svg
+                className="w-5 h-5 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
+            </button>
+            <div>
+              <h1 className="text-xl sm:text-2xl font-bold text-white">
+                HalluciChat
+              </h1>
+              {currentUser && (
+                <div className="text-white/80 text-xs sm:text-sm min-w-0">
+                  <p className="flex items-center space-x-1">
+                    <span>Welcome,</span>
+                    <span className="font-medium text-base truncate max-w-24 sm:max-w-32">
+                      {currentUser.nickname}
                     </span>
-                  )}
-                </p>
-                <p className="text-white/60 text-xs mt-1">
-                  Style:{" "}
-                  <span className="capitalize font-medium">
-                    {currentUser.style}
-                  </span>{" "}
-                  ✨
-                </p>
-              </div>
-            )}
+                    {currentUser.nickname !== currentUser.originalNickname && (
+                      <span className="text-white/60 hidden sm:inline truncate">
+                        (originally {currentUser.originalNickname})
+                      </span>
+                    )}
+                  </p>
+                  <p className="text-white/60 text-xs mt-1">
+                    Style:{" "}
+                    <span className="capitalize font-medium">
+                      {currentUser.style}
+                    </span>{" "}
+                    ✨
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
-          <div className="flex items-center space-x-4">
-            <div className="text-white/80 text-sm">
+          <div className="flex items-center space-x-2 sm:space-x-4">
+            <div className="text-white/80 text-xs sm:text-sm">
               {users.length} {users.length === 1 ? "user" : "users"} online
             </div>
             <button
               onClick={leaveChat}
-              className="bg-red-500/80 hover:bg-red-500 text-white px-4 py-2 rounded-lg transition-colors"
+              className="bg-red-500/80 hover:bg-red-500 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-lg transition-colors text-xs sm:text-sm"
             >
-              Leave Chat
+              Leave
             </button>
           </div>
         </div>
       </div>
 
-      <div className="flex-1 flex max-w-6xl mx-auto w-full">
+      <div className="flex-1 flex max-w-6xl mx-auto w-full relative overflow-hidden">
+        {/* Mobile Sidebar Overlay */}
+        {isSidebarOpen && (
+          <div
+            className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+            onClick={() => setIsSidebarOpen(false)}
+          />
+        )}
+
         {/* Users Sidebar */}
-        <div className="w-64 bg-white/5 backdrop-blur-sm border-r border-white/10 p-4">
-          <h3 className="text-white font-semibold mb-4">Online Users</h3>
-          <div className="space-y-2">
+        <div
+          className={`
+          w-64 bg-white/5 backdrop-blur-sm border-r border-white/10 p-4 flex-shrink-0 flex flex-col
+          lg:block
+          ${isSidebarOpen ? "fixed left-0 top-0 h-full z-50" : "hidden"}
+        `}
+        >
+          <h3 className="text-white font-semibold mb-4 flex-shrink-0">
+            Online Users
+          </h3>
+          <div className="space-y-2 overflow-y-auto flex-1">
             {users.map((user) => (
               <div
                 key={user.id}
@@ -230,8 +271,8 @@ export default function Chat() {
                 }
               >
                 <div className="flex items-center justify-between">
-                  <div className="flex-1">
-                    <div className="text-white font-medium">
+                  <div className="flex-1 min-w-0">
+                    <div className="text-white font-medium text-base truncate">
                       {user.nickname}
                     </div>
                     <div className="text-white/60 text-xs capitalize">
@@ -269,13 +310,13 @@ export default function Chat() {
         </div>
 
         {/* Chat Area */}
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col min-h-0">
           {/* Messages */}
           <div className="flex-1 overflow-y-auto p-4 space-y-4">
             {messages.map((message) => (
               <div key={message.id} className="flex justify-start">
                 <div
-                  className={`max-w-xs lg:max-w-md px-4 py-2 rounded-2xl relative group ${
+                  className={`max-w-xs sm:max-w-sm lg:max-w-lg px-3 py-3 lg:px-4 lg:py-3 rounded-2xl relative group ${
                     message.user.originalNickname === userOriginalNickname
                       ? "bg-gradient-to-r from-indigo-600 to-blue-600 text-white border-2 border-indigo-400"
                       : "bg-white/20 text-white backdrop-blur-sm border-2 border-transparent"
@@ -286,25 +327,13 @@ export default function Chat() {
                       : undefined
                   }
                 >
-                  <div className="flex items-center space-x-2 mb-1">
-                    <span className="font-medium text-sm">
+                  <div className="flex justify-between items-center space-x-2 mb-1">
+                    <span className="font-medium text-base truncate">
                       {message.user.nickname}
-                      {message.user.originalNickname ===
-                        userOriginalNickname && (
-                        <span className="ml-1 text-xs opacity-75">(You)</span>
-                      )}
                     </span>
-                    <span className="text-xs opacity-70">
+                    <span className="text-xs opacity-70 flex-shrink-0">
                       {formatTime(message.timestamp)}
                     </span>
-                    {message.content !== message.originalContent && (
-                      <span
-                        className="text-xs opacity-50 ml-1"
-                        title="Message was transformed by AI"
-                      >
-                        ✨
-                      </span>
-                    )}
                   </div>
                   <div className="break-words cursor-default">
                     {message.content}
@@ -330,8 +359,11 @@ export default function Chat() {
           </div>
 
           {/* Message Input */}
-          <div className="border-t border-white/20 p-4">
-            <form onSubmit={sendMessage} className="flex space-x-4">
+          <div className="border-t border-white/20 p-4 bg-black/20 backdrop-blur-sm lg:bg-transparent flex-shrink-0">
+            <form
+              onSubmit={sendMessage}
+              className="flex space-x-2 lg:space-x-4"
+            >
               <input
                 type="text"
                 value={messageInput}
@@ -339,13 +371,13 @@ export default function Chat() {
                   setMessageInput((e.target as HTMLInputElement).value)
                 }
                 placeholder="Type your message..."
-                className="flex-1 px-4 py-3 bg-white/20 border border-white/30 rounded-xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent backdrop-blur-sm"
+                className="flex-1 px-3 py-2 lg:px-4 lg:py-3 bg-white/20 border border-white/30 rounded-xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent backdrop-blur-sm text-sm lg:text-base"
                 maxLength={500}
               />
               <button
                 type="submit"
                 disabled={!messageInput.trim()}
-                className="bg-gradient-to-r from-indigo-600 to-blue-600 text-white font-semibold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl hover:from-indigo-700 hover:to-blue-700 transform hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                className="bg-gradient-to-r from-indigo-600 to-blue-600 text-white font-semibold px-4 py-2 lg:px-6 lg:py-3 rounded-xl shadow-lg hover:shadow-xl hover:from-indigo-700 hover:to-blue-700 transform hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none text-sm lg:text-base"
               >
                 Send
               </button>

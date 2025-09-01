@@ -44,19 +44,19 @@ export default function Home() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-700 flex items-center justify-center p-4">
-      <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 w-full max-w-lg shadow-2xl border border-white/20">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-white mb-4 tracking-tight">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-700 flex items-center justify-center p-4 sm:p-6">
+      <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-6 sm:p-8 w-full max-w-lg shadow-2xl border border-white/20">
+        <div className="text-center mb-6 sm:mb-8">
+          <h1 className="text-3xl sm:text-4xl font-bold text-white mb-4 tracking-tight">
             HalluciChat
           </h1>
-          <p className="text-white/80 text-lg">
+          <p className="text-white/80 text-base sm:text-lg">
             Enter the AI-powered chat realm where your words transform into
             magic with your chosen style ✨
           </p>
         </div>
 
-        <form onSubmit={handleJoinChat} className="space-y-6">
+        <form onSubmit={handleJoinChat} className="space-y-4 sm:space-y-6">
           <div>
             <label
               htmlFor="nickname"
@@ -70,7 +70,7 @@ export default function Home() {
               value={nickname}
               onChange={(e) => setNickname(e.target.value)}
               placeholder="Enter your nickname..."
-              className="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent backdrop-blur-sm"
+              className="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent backdrop-blur-sm text-base"
               maxLength={50}
               required
             />
@@ -80,17 +80,17 @@ export default function Home() {
             <label className="block text-sm font-medium text-white/90 mb-3">
               Choose your transformation style
             </label>
-            <div className="space-y-3">
+            <div className="space-y-2 sm:space-y-3">
               {styleOptions.map((option) => (
                 <label
                   key={option.value}
                   className={`block cursor-pointer rounded-xl border-2 transition-all duration-200 ${
                     selectedStyle === option.value
                       ? "border-white/50 bg-white/20"
-                      : "border-white/20 bg-white/10 hover:border-white/30 hover:bg-white/15"
+                      : "border-white/20 bg-white/10 hover:border-white/30 hover:bg-white/15 active:bg-white/20"
                   }`}
                 >
-                  <div className="p-4">
+                  <div className="p-3 sm:p-4">
                     <input
                       type="radio"
                       name="style"
@@ -102,18 +102,18 @@ export default function Home() {
                       className="sr-only"
                     />
                     <div className="flex items-center justify-between">
-                      <div>
+                      <div className="flex-1 min-w-0">
                         <div
-                          className={`text-lg font-bold bg-gradient-to-r ${option.color} bg-clip-text text-transparent`}
+                          className={`text-base sm:text-lg font-bold bg-gradient-to-r ${option.color} bg-clip-text text-transparent`}
                         >
                           {option.label}
                         </div>
-                        <div className="text-white/70 text-sm mt-1">
+                        <div className="text-white/70 text-xs sm:text-sm mt-1 pr-2">
                           {option.description}
                         </div>
                       </div>
                       <div
-                        className={`w-5 h-5 rounded-full border-2 transition-all duration-200 ${
+                        className={`w-5 h-5 rounded-full border-2 transition-all duration-200 flex-shrink-0 ${
                           selectedStyle === option.value
                             ? "border-white bg-white"
                             : "border-white/40"
@@ -133,7 +133,7 @@ export default function Home() {
           <button
             type="submit"
             disabled={!nickname.trim() || isLoading}
-            className="w-full bg-gradient-to-r from-indigo-600 to-blue-600 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl hover:from-indigo-700 hover:to-blue-700 transform hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+            className="w-full bg-gradient-to-r from-indigo-600 to-blue-600 text-white font-semibold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl hover:from-indigo-700 hover:to-blue-700 active:scale-95 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none text-base sm:text-lg"
           >
             {isLoading ? (
               <div className="flex items-center justify-center">
