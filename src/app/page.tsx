@@ -2,12 +2,11 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-
-type PromptStyle = "freaky" | "victorian" | "caveman";
+import { PromptStyle } from "../types";
 
 export default function Home() {
   const [nickname, setNickname] = useState("");
-  const [selectedStyle, setSelectedStyle] = useState<PromptStyle>("freaky");
+  const [selectedStyle, setSelectedStyle] = useState<PromptStyle>("uwu");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
@@ -24,22 +23,19 @@ export default function Home() {
 
   const styleOptions = [
     {
-      value: "freaky" as PromptStyle,
-      label: "Ultra-Freaky 👅",
-      description: "Chaotic, playful, and absolutely wild transformations",
-      color: "from-pink-500 to-violet-500",
+      value: "uwu" as PromptStyle,
+      label: "Ultra-Cute UwU ❤️",
+      color: "from-pink-400 to-violet-800",
     },
     {
       value: "victorian" as PromptStyle,
       label: "Victorian Elegance 🎩",
-      description: "Pompous, ornate, and excessively formal style",
-      color: "from-amber-500 to-orange-500",
+      color: "from-amber-400 to-orange-800",
     },
     {
       value: "caveman" as PromptStyle,
       label: "Caveman Simple 🔥",
-      description: "Extremely simple, basic, and primal language",
-      color: "from-stone-500 to-gray-500",
+      color: "from-red-400 to-amber-800",
     },
   ];
 
@@ -86,8 +82,8 @@ export default function Home() {
                   key={option.value}
                   className={`block cursor-pointer rounded-xl border-2 transition-all duration-200 ${
                     selectedStyle === option.value
-                      ? "border-white/50 bg-white/20"
-                      : "border-white/20 bg-white/10 hover:border-white/30 hover:bg-white/15 active:bg-white/20"
+                      ? "border-slate-400 bg-slate-700"
+                      : "border-slate-600 bg-slate-800 hover:border-slate-500 hover:bg-slate-700 active:bg-slate-600"
                   }`}
                 >
                   <div className="p-3 sm:p-4">
@@ -108,15 +104,12 @@ export default function Home() {
                         >
                           {option.label}
                         </div>
-                        <div className="text-white/70 text-xs sm:text-sm mt-1 pr-2">
-                          {option.description}
-                        </div>
                       </div>
                       <div
                         className={`w-5 h-5 rounded-full border-2 transition-all duration-200 flex-shrink-0 ${
                           selectedStyle === option.value
-                            ? "border-white bg-white"
-                            : "border-white/40"
+                            ? "border-slate-300 bg-slate-300"
+                            : "border-slate-500"
                         }`}
                       >
                         {selectedStyle === option.value && (
@@ -133,7 +126,7 @@ export default function Home() {
           <button
             type="submit"
             disabled={!nickname.trim() || isLoading}
-            className="w-full bg-gradient-to-r from-indigo-600 to-blue-600 text-white font-semibold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl hover:from-indigo-700 hover:to-blue-700 active:scale-95 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none text-base sm:text-lg"
+            className="w-full cursor-pointer bg-gradient-to-r from-indigo-600 to-blue-600 text-white font-semibold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl hover:from-indigo-700 hover:to-blue-700 active:scale-95 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none text-base sm:text-lg"
           >
             {isLoading ? (
               <div className="flex items-center justify-center">

@@ -4,13 +4,11 @@
 
 [![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://www.heroku.com/deploy?template=https://github.com/marcinciarka/hallucichat)
 
-_Choose your transformation style: Ultra-Freaky 👅, Victorian Elegance 🎩, or Caveman Simple 🔥_
-
 ## ✨ Features
 
 - **Real-time messaging** with Socket.IO WebSockets
 - **AI-powered transformations** using Google's Gemini API
-- **Multiple transformation styles**: Choose from Ultra-Freaky 👅, Victorian Elegance 🎩, or Caveman Simple 🔥
+- **Multiple transformation styles**
 - **Nickname transformation** - Your nickname gets a creative AI makeover in your chosen style
 - **Message transformation** - Your messages become more interesting and creative
 - **Style selection** - Pick your preferred transformation style during login
@@ -79,10 +77,7 @@ _Choose your transformation style: Ultra-Freaky 👅, Victorian Elegance 🎩, o
 ## 📱 How to Use
 
 1. **Enter your nickname** on the homepage
-2. **Choose your transformation style**:
-   - **Ultra-Freaky 👅**: Chaotic, playful, and absolutely wild transformations
-   - **Victorian Elegance 🎩**: Pompous, ornate, and excessively formal style
-   - **Caveman Simple 🔥**: Extremely simple, basic, and primal language
+2. **Choose your transformation style**
 3. **Join the chat** and see your nickname transformed by AI in your chosen style
 4. **Send messages** and watch them get creatively modified according to your style
 5. **See other users** in the sidebar with their transformed nicknames and styles
@@ -177,28 +172,6 @@ hallucichat/
 ## 🎨 AI Transformations
 
 The app uses Google's Gemini Pro model to transform your content in three distinct styles:
-
-### 🎭 Transformation Styles
-
-1. **Ultra-Freaky 👅**
-
-   - Extremely chaotic, unpredictable, and absurd
-   - Wild emojis, stretched letters, gibberish insertions
-   - Playful, surreal, over-the-top transformations
-   - Example: "Hello" → "Heeeelllooo👅✨ blip-skrrt!!"
-
-2. **Victorian Elegance 🎩**
-
-   - Elegant, pompous, and highly formal
-   - Ornate vocabulary, archaic phrasing
-   - Theatrical and dignified language
-   - Example: "Hello" → "I bid thee a most gracious salutation"
-
-3. **Caveman Simple 🔥**
-   - Maximally simplified language
-   - Short, direct, primal expressions
-   - Basic grammar and minimal words
-   - Example: "Hello there" → "Hi 🔥"
 
 ### 🔒 Safety Features
 

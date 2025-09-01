@@ -3,8 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { io, Socket } from "socket.io-client";
-
-type PromptStyle = "freaky" | "victorian" | "caveman";
+import { PromptStyle } from "../../types";
 
 interface User {
   id: string;
@@ -36,6 +35,13 @@ export default function Chat() {
   const [showingOriginal, setShowingOriginal] = useState<Set<string>>(
     new Set()
   );
+  const [quotaInfo, setQuotaInfo] = useState<{
+    requestsRemaining: number | null;
+    requestsLimit: number | null;
+    resetTime: Date | null;
+    isExceeded: boolean;
+    lastError: string | null;
+  } | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
@@ -108,6 +114,22 @@ export default function Chat() {
       console.log(`${user.nickname} left the chat`);
     });
 
+    newSocket.on(
+      "quota-update",
+      (quota: {
+        requestsRemaining: number | null;
+        requestsLimit: number | null;
+        resetTime: string | null;
+        isExceeded: boolean;
+        lastError: string | null;
+      }) => {
+        setQuotaInfo({
+          ...quota,
+          resetTime: quota.resetTime ? new Date(quota.resetTime) : null,
+        });
+      }
+    );
+
     newSocket.on("error", (errorMessage: string) => {
       setError(errorMessage);
     });
@@ -121,6 +143,18 @@ export default function Chat() {
       newSocket.close();
     };
   }, [router]);
+
+  // Request quota info periodically
+  useEffect(() => {
+    if (socket) {
+      socket.emit("request-quota");
+      const interval = setInterval(() => {
+        socket.emit("request-quota");
+      }, 30000); // Every 30 seconds
+
+      return () => clearInterval(interval);
+    }
+  }, [socket]);
 
   const sendMessage = (e: React.FormEvent) => {
     e.preventDefault();
@@ -239,6 +273,33 @@ export default function Chat() {
             </div>
           </div>
           <div className="flex items-center space-x-2 sm:space-x-4">
+            {quotaInfo && (
+              <div className="text-white/80 text-xs">
+                <div
+                  className={`font-medium ${
+                    quotaInfo.isExceeded ? "text-red-400" : "text-white"
+                  }`}
+                >
+                  {quotaInfo.isExceeded
+                    ? "API Limited"
+                    : quotaInfo.requestsLimit
+                    ? `AI: ${quotaInfo.requestsRemaining || 0}/${
+                        quotaInfo.requestsLimit
+                      }`
+                    : "AI: Unknown"}
+                </div>
+                {quotaInfo.isExceeded && quotaInfo.lastError && (
+                  <div
+                    className="text-red-400 text-xs"
+                    title={quotaInfo.lastError}
+                  >
+                    {quotaInfo.resetTime
+                      ? `Reset: ${quotaInfo.resetTime.toLocaleTimeString()}`
+                      : "Rate limited"}
+                  </div>
+                )}
+              </div>
+            )}
             <div className="text-white/80 text-xs sm:text-sm">
               {users.length} {users.length === 1 ? "user" : "users"} online
             </div>

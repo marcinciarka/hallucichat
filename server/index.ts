@@ -1,9 +1,9 @@
 import { createServer } from 'http';
 import { Server } from 'socket.io';
-import { transformMessage, transformNickname } from './lib/gemini';
-import { PromptStyle } from './lib/prompts';
+import { transformMessage, transformNickname, getQuotaInfo } from './lib/gemini';
 import dotenv from 'dotenv';
 import next from 'next';
+import { PromptStyle } from './lib/prompts';
 
 // Load environment variables from .env.local in dev, .env in production
 dotenv.config({ path: process.env.NODE_ENV === 'production' ? '.env' : '.env.local' });
@@ -76,6 +76,7 @@ io.on('connection', (socket) => {
       socket.emit('user-joined', user);
       socket.emit('users-list', Array.from(users.values()));
       socket.emit('messages-history', messages);
+      socket.emit('quota-update', getQuotaInfo());
 
       // Broadcast to others that a new user joined
       socket.broadcast.emit('user-joined', user);
@@ -86,6 +87,11 @@ io.on('connection', (socket) => {
       console.error('Error transforming nickname:', error);
       socket.emit('error', 'Failed to join chat');
     }
+  });
+
+  // Handle quota info requests
+  socket.on('request-quota', () => {
+    socket.emit('quota-update', getQuotaInfo());
   });
 
   // Handle sending messages
@@ -117,6 +123,9 @@ io.on('connection', (socket) => {
 
       // Broadcast message to all users
       io.emit('new-message', message);
+
+      // Broadcast quota update to all users
+      io.emit('quota-update', getQuotaInfo());
 
       console.log(`Message from ${user.nickname}: ${transformedContent}`);
     } catch (error) {

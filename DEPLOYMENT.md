@@ -4,10 +4,7 @@
 
 ## Features
 
-- **AI-powered chat transformations** in 3 unique styles:
-  - Ultra-Freaky 👅 (chaotic and wild)
-  - Victorian Elegance 🎩 (formal and ornate)
-  - Caveman Simple 🔥 (basic and primal)
+- **AI-powered chat transformations**
 - **Real-time messaging** with WebSockets
 - **Style selection** during login
 - **Transparent transformations** (original content shown)
@@ -63,7 +60,7 @@ heroku open
 ## Important Notes
 
 - App works without Gemini API key (no AI transformations)
-- Users can select from 3 transformation styles: Ultra-Freaky, Victorian, or Caveman
+- Users can select from 3 transformation styles
 - WebSockets must be supported by your Heroku plan
 - The server runs on the port specified by Heroku's PORT env var
 - Both frontend and WebSocket server run on the same port in production
