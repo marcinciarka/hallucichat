@@ -42,16 +42,6 @@ export default function Home() {
       label: "Boomer",
       color: "from-green-400 to-blue-800",
     },
-    {
-      value: "pirate" as PromptStyle,
-      label: "Pirate",
-      color: "from-indigo-400 to-purple-800",
-    },
-    {
-      value: "robot" as PromptStyle,
-      label: "Robot",
-      color: "from-gray-200 to-zinc-800",
-    },
   ];
 
   return (

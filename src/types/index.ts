@@ -1,2 +1,2 @@
 
-export type PromptStyle = "uwu" | "victorian" | "caveman" | "boomer" | "pirate" | "robot";
+export type PromptStyle = "uwu" | "victorian" | "caveman" | "boomer";
