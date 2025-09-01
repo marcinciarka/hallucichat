@@ -1,0 +1,42 @@
+{
+  "name": "HalluciTalk",
+  "description": "An AI-powered real-time chat application where your messages and nicknames are magically transformed by Google's Gemini AI in your chosen style.",
+  "repository": "https://github.com/marcinciarka/hallucichat",
+  "logo": "https://img.icons8.com/fluency/96/chat.png",
+  "keywords": [
+    "chat",
+    "real-time",
+    "ai",
+    "gemini",
+    "websockets",
+    "nextjs",
+    "typescript"
+  ],
+  "image": "heroku/nodejs",
+  "stack": "heroku-22",
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ],
+  "env": {
+    "NODE_ENV": {
+      "description": "Node environment",
+      "value": "production"
+    },
+    "GEMINI_API_KEY": {
+      "description": "Google Gemini API key for AI transformations (optional - app works without it but won't transform messages)",
+      "required": false
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "basic"
+    }
+  },
+  "addons": [],
+  "scripts": {
+    "postdeploy": "echo 'HalluciTalk deployed successfully! Visit your app to start chatting with AI-powered transformations.'"
+  }
+}

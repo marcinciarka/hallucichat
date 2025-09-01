@@ -1,5 +1,17 @@
 # HalluciTalk Deployment Quick Guide
 
+[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://www.heroku.com/deploy?template=https://github.com/marcinciarka/hallucichat)
+
+## Features
+
+- **AI-powered chat transformations** in 3 unique styles:
+  - Ultra-Freaky 👅 (chaotic and wild)
+  - Victorian Elegance 🎩 (formal and ornate)
+  - Caveman Simple 🔥 (basic and primal)
+- **Real-time messaging** with WebSockets
+- **Style selection** during login
+- **Transparent transformations** (original content shown)
+
 ## Prerequisites
 
 - Node.js 18+
@@ -25,6 +37,12 @@ npm run dev
 
 ## Heroku Deployment
 
+### Option 1: One-Click Deploy (Recommended)
+
+[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
+### Option 2: Manual Deploy
+
 ```bash
 # 1. Create Heroku app
 heroku create your-app-name
@@ -45,14 +63,17 @@ heroku open
 ## Important Notes
 
 - App works without Gemini API key (no AI transformations)
+- Users can select from 3 transformation styles: Ultra-Freaky, Victorian, or Caveman
 - WebSockets must be supported by your Heroku plan
 - The server runs on the port specified by Heroku's PORT env var
 - Both frontend and WebSocket server run on the same port in production
+- Each user's selected style persists throughout their chat session
 
 ## File Structure Summary
 
-- `src/app/page.tsx` - Homepage (nickname entry)
-- `src/app/chat/page.tsx` - Chat interface
-- `server/index.ts` - WebSocket server
-- `lib/gemini.ts` - AI integration
+- `src/app/page.tsx` - Homepage (nickname entry + style selection)
+- `src/app/chat/page.tsx` - Chat interface with style indicators
+- `server/index.ts` - WebSocket server with per-user style handling
+- `server/lib/gemini.ts` - AI integration with style-based transformations
+- `server/lib/prompts.ts` - Transformation prompts for each style
 - `Procfile` - Heroku config
