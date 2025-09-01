@@ -33,6 +33,9 @@ export default function Chat() {
     string | null
   >(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [showingOriginal, setShowingOriginal] = useState<Set<string>>(
+    new Set()
+  );
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
@@ -139,6 +142,18 @@ export default function Chat() {
     localStorage.removeItem("HalluciChat-nickname");
     localStorage.removeItem("HalluciChat-style");
     router.push("/");
+  };
+
+  const toggleMessageContent = (messageId: string) => {
+    setShowingOriginal((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(messageId)) {
+        newSet.delete(messageId);
+      } else {
+        newSet.add(messageId);
+      }
+      return newSet;
+    });
   };
 
   if (isConnecting) {
@@ -321,37 +336,42 @@ export default function Chat() {
                       ? "bg-gradient-to-r from-indigo-600 to-blue-600 text-white border-2 border-indigo-400"
                       : "bg-white/20 text-white backdrop-blur-sm border-2 border-transparent"
                   }`}
-                  title={
-                    message.content !== message.originalContent
-                      ? `Original: ${message.originalContent}`
-                      : undefined
-                  }
                 >
                   <div className="flex justify-between items-center space-x-2 mb-1">
                     <span className="font-medium text-base truncate">
                       {message.user.nickname}
                     </span>
-                    <span className="text-xs opacity-70 flex-shrink-0">
-                      {formatTime(message.timestamp)}
-                    </span>
-                  </div>
-                  <div className="break-words cursor-default">
-                    {message.content}
-                  </div>
-
-                  {/* Custom Tooltip */}
-                  {message.content !== message.originalContent && (
-                    <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-10 max-w-xs">
-                      <div className="font-medium text-xs text-gray-300 mb-1">
-                        Original message:
-                      </div>
-                      <div className="break-words">
-                        {message.originalContent}
-                      </div>
-                      {/* Arrow */}
-                      <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
+                    <div className="flex items-center space-x-2 flex-shrink-0">
+                      <button
+                        onClick={() => toggleMessageContent(message.id)}
+                        disabled={message.content === message.originalContent}
+                        className={`text-xs transition-opacity duration-200 px-2 py-1 rounded-md whitespace-nowrap ${
+                          message.content === message.originalContent
+                            ? "opacity-0 cursor-not-allowed"
+                            : "opacity-0 group-hover:opacity-70 hover:!opacity-100 bg-white/20 hover:bg-white/30"
+                        }`}
+                        title={
+                          message.content === message.originalContent
+                            ? "Message not transformed"
+                            : showingOriginal.has(message.id)
+                            ? "Show AI-transformed message"
+                            : "Show original message"
+                        }
+                      >
+                        {showingOriginal.has(message.id)
+                          ? "[show ai]"
+                          : "[show original]"}
+                      </button>
+                      <span className="text-xs opacity-70">
+                        {formatTime(message.timestamp)}
+                      </span>
                     </div>
-                  )}
+                  </div>
+                  <div className="break-words cursor-default whitespace-pre-wrap">
+                    {showingOriginal.has(message.id)
+                      ? message.originalContent
+                      : message.content}
+                  </div>
                 </div>
               </div>
             ))}
