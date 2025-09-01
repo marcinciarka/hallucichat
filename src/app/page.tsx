@@ -24,18 +24,33 @@ export default function Home() {
   const styleOptions = [
     {
       value: "uwu" as PromptStyle,
-      label: "Ultra-Cute UwU ❤️",
-      color: "from-pink-400 to-violet-800",
+      label: "Ultra-Cute UwU",
+      color: "from-pink-400 to-violet-400",
     },
     {
       value: "victorian" as PromptStyle,
-      label: "Victorian Elegance 🎩",
+      label: "Victorian",
       color: "from-amber-400 to-orange-800",
     },
     {
       value: "caveman" as PromptStyle,
-      label: "Caveman Simple 🔥",
+      label: "Caveman",
       color: "from-red-400 to-amber-800",
+    },
+    {
+      value: "boomer" as PromptStyle,
+      label: "Boomer",
+      color: "from-green-400 to-blue-800",
+    },
+    {
+      value: "pirate" as PromptStyle,
+      label: "Pirate",
+      color: "from-indigo-400 to-purple-800",
+    },
+    {
+      value: "robot" as PromptStyle,
+      label: "Robot",
+      color: "from-gray-200 to-zinc-800",
     },
   ];
 
@@ -76,14 +91,14 @@ export default function Home() {
             <label className="block text-sm font-medium text-white/90 mb-3">
               Choose your transformation style
             </label>
-            <div className="space-y-2 sm:space-y-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
               {styleOptions.map((option) => (
                 <label
                   key={option.value}
                   className={`block cursor-pointer rounded-xl border-2 transition-all duration-200 ${
                     selectedStyle === option.value
-                      ? "border-slate-400 bg-slate-700"
-                      : "border-slate-600 bg-slate-800 hover:border-slate-500 hover:bg-slate-700 active:bg-slate-600"
+                      ? "border-slate-400 bg-slate-800"
+                      : "border-slate-800 bg-slate-800 hover:border-slate-500 hover:bg-slate-700 active:bg-slate-800"
                   }`}
                 >
                   <div className="p-3 sm:p-4">
@@ -91,30 +106,20 @@ export default function Home() {
                       type="radio"
                       name="style"
                       value={option.value}
+                      hidden
                       checked={selectedStyle === option.value}
                       onChange={(e) =>
                         setSelectedStyle(e.target.value as PromptStyle)
                       }
-                      className="sr-only"
+                      className="sr-only hidden"
                     />
                     <div className="flex items-center justify-between">
                       <div className="flex-1 min-w-0">
                         <div
-                          className={`text-base sm:text-lg font-bold bg-gradient-to-r ${option.color} bg-clip-text text-transparent`}
+                          className={`text-base text-center sm:text-lg font-bold bg-gradient-to-r ${option.color} bg-clip-text text-transparent`}
                         >
                           {option.label}
                         </div>
-                      </div>
-                      <div
-                        className={`w-5 h-5 rounded-full border-2 transition-all duration-200 flex-shrink-0 ${
-                          selectedStyle === option.value
-                            ? "border-slate-300 bg-slate-300"
-                            : "border-slate-500"
-                        }`}
-                      >
-                        {selectedStyle === option.value && (
-                          <div className="w-full h-full rounded-full bg-gradient-to-r from-indigo-600 to-blue-600"></div>
-                        )}
                       </div>
                     </div>
                   </div>
