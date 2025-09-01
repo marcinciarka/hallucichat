@@ -55,7 +55,7 @@ export async function transformNickname(originalNickname: string, style: PromptS
   try {
     const chat = await getChatSession(style);
     const result = await chat.sendMessage(`TRANSFORM NICKNAME: ${originalNickname}`);
-    const transformedNickname = result.response.text().trim();
+    const transformedNickname = result.response.text().replace('TRANSFORM NICKNAME:', '').trim();
     console.log('transformNickname', originalNickname, style, transformedNickname);
 
 
@@ -84,7 +84,7 @@ export async function transformMessage(originalMessage: string, style: PromptSty
   try {
     const chat = await getChatSession(style);
     const result = await chat.sendMessage(`TRANSFORM MESSAGE: ${originalMessage}`);
-    const transformedMessage = result.response.text().trim();
+    const transformedMessage = result.response.text().replace('TRANSFORM MESSAGE:', '').trim();
     console.log('transformMessage', originalMessage, style, transformedMessage);
 
     // Remove quotes if present (sometimes AI adds them)
