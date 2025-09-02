@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { io, Socket } from "socket.io-client";
 import { PromptStyle } from "../../types";
+import { chatAudio } from "../../utils/audio";
 
 interface User {
   id: string;
@@ -42,6 +43,7 @@ export default function Chat() {
     isExceeded: boolean;
     lastError: string | null;
   } | null>(null);
+  const [soundEnabled, setSoundEnabled] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
@@ -84,6 +86,9 @@ export default function Chat() {
     newSocket.on("user-joined", (user: User) => {
       if (user.id === newSocket.id) {
         setCurrentUser(user);
+      } else {
+        // Play sound for other users joining
+        chatAudio.userJoined();
       }
     });
 
@@ -108,10 +113,15 @@ export default function Chat() {
           timestamp: new Date(message.timestamp),
         },
       ]);
+      // Play sound for new messages (except own messages)
+      if (message.user.originalNickname !== userOriginalNickname) {
+        chatAudio.newMessage();
+      }
     });
 
     newSocket.on("user-left", (user: User) => {
       console.log(`${user.nickname} left the chat`);
+      chatAudio.userLeft();
     });
 
     newSocket.on(
@@ -142,7 +152,7 @@ export default function Chat() {
     return () => {
       newSocket.close();
     };
-  }, [router]);
+  }, [router, userOriginalNickname]);
 
   // Request quota info periodically
   useEffect(() => {
@@ -176,6 +186,11 @@ export default function Chat() {
     localStorage.removeItem("HalluciChat-nickname");
     localStorage.removeItem("HalluciChat-style");
     router.push("/");
+  };
+
+  const toggleSound = () => {
+    const enabled = chatAudio.toggle();
+    setSoundEnabled(enabled);
   };
 
   const toggleMessageContent = (messageId: string) => {
@@ -303,6 +318,17 @@ export default function Chat() {
             <div className="text-white/80 text-xs sm:text-sm">
               {users.length} {users.length === 1 ? "user" : "users"} online
             </div>
+            <button
+              onClick={toggleSound}
+              className={`p-2 rounded-lg transition-colors text-xs sm:text-sm ${
+                soundEnabled
+                  ? "bg-green-500/20 text-green-400 hover:bg-green-500/30"
+                  : "bg-gray-500/20 text-gray-400 hover:bg-gray-500/30"
+              }`}
+              title={soundEnabled ? "Disable sounds" : "Enable sounds"}
+            >
+              {soundEnabled ? "🔊" : "🔇"}
+            </button>
             <button
               onClick={leaveChat}
               className="bg-red-500/80 hover:bg-red-500 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-lg transition-colors text-xs sm:text-sm"
